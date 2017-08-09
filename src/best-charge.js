@@ -3,10 +3,8 @@ function bestCharge(inputs){
   var allDiscounts = loadPromotions();         //获取打折信息
 
   var result = "============= 订餐明细 =============\n"
-  // console.log(result);
   //计算原金额
   var food_menu = getAmount(allItems, allDiscounts, inputs);
-  // console.log(food_menu.length)
   result = chooseDiscount(food_menu, result);               //选择折扣方式
   console.log(result);
   return result;
@@ -15,14 +13,12 @@ function bestCharge(inputs){
 function getAmount(allItems, allDiscounts, inputs){
   //从订单上获取商品（一次便可获取商品总数，即订单上不会有重复的商品）
   //所有商品所有信息
-  var menu = [];
-  // console.log("inputs:"+inputs+"\n");
-  inputs.forEach(item =>{
+    var menu = [];
+    inputs.forEach(item =>{
 
     var food = {id: item,
       count:1};
     food = getFoodCount(food);					//获取菜品数量
-    // console.log("food:"+food.id+"\t"+food.count);
     food = getFoodPrice(allItems, allDiscounts, food);		//获取菜品单价
     menu.push(food);
   })
@@ -36,9 +32,7 @@ function getAmount(allItems, allDiscounts, inputs){
  */
 function calculate_discount(discount_food, result) {
   let [discount_1, discount_2, actual_discount] = [0, 0, 0];      //两种打折方式
-  // if (discount_food.originMoney >= 30) {
-  //   discount_1 = discount_food.originMoney - parseInt(discount_food.originMoney / 30) * 6;
-  // }
+
   discount_1 = parseInt(discount_food.originMoney / 30) * 6;
   discount_2 = discount_food.promotion_food_money;
   console.log("1:"+discount_1+"\t2:"+discount_2+"\n");
@@ -48,15 +42,16 @@ function calculate_discount(discount_food, result) {
       result = result + discount_food.promotion_food[i] + "，";
     }
     result = result + discount_food.promotion_food[i] + ")，省"
-      + discount_food.promotion_food_money + "元\n";
+      + discount_food.promotion_food_money + "元\n" + "-----------------------------------\n";
     actual_discount = discount_2;
   }
   else if(discount_food.originMoney > 30){
-    result = result + "使用优惠:\n满30减6元，省" + discount_1 + "元\n";
+    result = result + "使用优惠:\n满30减6元，省" + discount_1 + "元\n"
+      + "-----------------------------------\n";
     actual_discount = discount_1;
   }
   let actual_dicount = discount_food.originMoney - actual_discount;
-  result += "-----------------------------------\n总计：" +  actual_dicount + "元\n==================================="
+  result += "总计：" + actual_dicount + "元\n==================================="
   return result;
 }
 
@@ -75,8 +70,8 @@ function chooseDiscount(food_menu, result){
   food_menu.forEach(item =>{
     let subtotal = item.count * item.price;
     discount_food.originMoney += subtotal;
-    // console.log(item.count+"\t"+item.price+"\t"+subtotal);
-    result += item.name + " x " + item.count + " = " + subtotal + "\n";
+
+    result += item.name + " x " + item.count + " = " + subtotal + "元\n";
     if(item.discount === "指定菜品半价"){
       discount_food.promotion_food.push(item.name);
       discount_food.promotion_food_money += subtotal / 2;
@@ -92,11 +87,6 @@ function chooseDiscount(food_menu, result){
 * 获取菜品数量
 */
 function getFoodCount(food){
-  //去空格
-  // food.replace()、
-
-  // console.log("food is "+food.id);
-  // let str = food.id.replace(/\s+/g,"").split("x");
   let str = food.id.replace(/\s+/g,"").split("x");
 
 
@@ -110,7 +100,6 @@ function getFoodCount(food){
 */
 function getFoodPrice(allItems, allDiscounts, food){
   food = getOriginPrice(allItems, food);				//获取商品原价
-  // console.log(food.id+"\t"+food.name+"\t"+food.price)
   food = getDiscount(allDiscounts, food);				//获取商品折扣信息
   return food;
 }
@@ -128,19 +117,6 @@ function getOriginPrice(allItems, food){
   return food;
 }
 
-/*
-* 获取菜品折扣------------暂时没用
-*/
-function getDiscountPrice(allDiscounts, food){
-//	let discountMenu = {
-//		originSubtotal
-//	}
-  let discount = getDiscount(allDiscounts, food);		//获取菜品折扣
-  switch(discount){
-    case '指定菜品半价':
-
-  }
-}
 
 /*
 * 获取菜品折扣类型
