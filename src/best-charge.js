@@ -1,3 +1,6 @@
+const loadAllItems = require("./items");
+const loadPromotions = require("./promotions");
+
 function bestCharge(inputs){
   var allItems = loadAllItems();              //获取商品列表
   var allDiscounts = loadPromotions();         //获取打折信息
@@ -136,4 +139,6 @@ function getDiscount(allDiscounts, food){
   }
   return food;
 }
+
+module.exports = bestCharge;
 
